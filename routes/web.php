@@ -29,7 +29,13 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
 
-Route::get('/tareas',[TareaController::class, 'create'])->name('tareas');
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard/tareas',[TareaController::class, 'create'])->name('dashboard.tareas');
 
-Route::post('/tareas',[TareaController::class, 'store'])->name('tareas.store');
+Route::middleware(['auth:sanctum', 'verified'])->get('/tareas',[TareaController::class, 'index'])->name('tareas');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/tareas',[TareaController::class, 'store'])->name('tareas');
+
+Route::middleware(['auth:sanctum', 'verified'])->put('/tareas/{id}',[TareaController::class, 'update'])->name('tareas');
+
+Route::middleware(['auth:sanctum', 'verified'])->delete('/tareas/{id}',[TareaController::class, 'destroy'])->name('tareas');
 

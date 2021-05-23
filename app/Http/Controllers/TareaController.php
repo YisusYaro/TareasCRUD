@@ -16,6 +16,8 @@ class TareaController extends Controller
     public function index()
     {
         //
+        return Tarea::all();
+
     }
 
     /**
@@ -25,7 +27,7 @@ class TareaController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Tareas/TareasComponent');
+        return Inertia::render('TareasComponent');
     }
 
     /**
@@ -36,6 +38,7 @@ class TareaController extends Controller
      */
     public function store(Request $request)
     {
+
         $nota = new Tarea();
         $nota->nombre = $request->nombre;
         $nota->descripcion = $request->descripcion;
