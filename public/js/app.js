@@ -18421,7 +18421,8 @@ __webpack_require__.r(__webpack_exports__);
       nota: {
         nombre: "",
         descripcion: ""
-      }
+      },
+      principalId: ""
     };
   },
   created: function created() {
@@ -18464,8 +18465,24 @@ __webpack_require__.r(__webpack_exports__);
       this.nota.id = item.id;
       this.modoEditar = true;
     },
-    editarNota: function editarNota(nota) {
+    marcarPrincipal: function marcarPrincipal(nota, index) {
       var _this3 = this;
+
+      axios.put("/tareas/principal/".concat(nota.id)).then(function (res) {
+        var indexAnt = _this3.notas.findIndex(function (item) {
+          return item.id === res.data[0].id;
+        });
+
+        var indexAct = _this3.notas.findIndex(function (item) {
+          return item.id === res.data[1].id;
+        });
+
+        _this3.notas[indexAnt] = res.data[0];
+        _this3.notas[indexAct] = res.data[1];
+      });
+    },
+    editarNota: function editarNota(nota) {
+      var _this4 = this;
 
       var params = {
         nombre: nota.nombre,
@@ -18476,23 +18493,23 @@ __webpack_require__.r(__webpack_exports__);
         descripcion: ""
       };
       axios.put("/tareas/".concat(nota.id), params).then(function (res) {
-        _this3.modoEditar = false;
+        _this4.modoEditar = false;
 
-        var index = _this3.notas.findIndex(function (item) {
+        var index = _this4.notas.findIndex(function (item) {
           return item.id === nota.id;
         });
 
-        _this3.notas[index] = res.data;
+        _this4.notas[index] = res.data;
       });
     },
     eliminarNota: function eliminarNota(nota, index) {
-      var _this4 = this;
+      var _this5 = this;
 
       var confirmacion = confirm("Eliminar nota ".concat(nota.nombre));
 
       if (confirmacion) {
         axios["delete"]("/tareas/".concat(nota.id)).then(function () {
-          _this4.notas.splice(index, 1);
+          _this5.notas.splice(index, 1);
         });
       }
     },
@@ -22956,7 +22973,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("h2", {
   "class": "font-semibold text-xl text-gray-800 leading-tight"
-}, " Tareas ", -1
+}, "Tareas", -1
 /* HOISTED */
 );
 
@@ -23081,42 +23098,13 @@ var _hoisted_22 = {
   "class": "sm:w-3/3 md:w-2/3 mx-auto"
 };
 var _hoisted_23 = {
-  "class": "my-5 grid grid-cols-3 gap-4"
-};
-
-var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-  "class": "text-xl font-bold p-3 col-span-2"
-}, "LISTA", -1
-/* HOISTED */
-);
-
-var _hoisted_25 = {
-  "class": "pl-20"
-};
-
-var _hoisted_26 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
-  xmlns: "http://www.w3.org/2000/svg",
-  "class": "h-6 w-6",
-  fill: "none",
-  viewBox: "0 0 24 24",
-  stroke: "currentColor"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
-  "stroke-linecap": "round",
-  "stroke-linejoin": "round",
-  "stroke-width": "2",
-  d: "M12 6v6m0 0v6m0-6h6m-6 0H6"
-})], -1
-/* HOISTED */
-);
-
-var _hoisted_27 = {
   "class": "bg-white shadow-md rounded my-6"
 };
-var _hoisted_28 = {
+var _hoisted_24 = {
   "class": "text-left w-full border-collapse"
 };
 
-var _hoisted_29 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("thead", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", {
+var _hoisted_25 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("thead", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", {
   "class": "py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light"
 }, " Título "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", {
   "class": "py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light"
@@ -23126,15 +23114,61 @@ var _hoisted_29 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
 /* HOISTED */
 );
 
-var _hoisted_30 = {
+var _hoisted_26 = {
   "class": "py-4 px-6 border-b border-grey-light"
 };
-var _hoisted_31 = {
+var _hoisted_27 = {
   "class": "py-4 px-6 border-b border-grey-light"
 };
-var _hoisted_32 = {
+var _hoisted_28 = {
   "class": "py-4 px-6 border-b border-grey-light"
 };
+
+var _hoisted_29 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
+  xmlns: "http://www.w3.org/2000/svg",
+  "class": "h-6 w-6",
+  fill: "none",
+  viewBox: "0 0 24 24",
+  stroke: "currentColor"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
+  "stroke-linecap": "round",
+  "stroke-linejoin": "round",
+  "stroke-width": "2",
+  d: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+})], -1
+/* HOISTED */
+);
+
+var _hoisted_30 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
+  xmlns: "http://www.w3.org/2000/svg",
+  "class": "h-6 w-6",
+  fill: "none",
+  viewBox: "0 0 24 24",
+  stroke: "currentColor"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
+  "stroke-linecap": "round",
+  "stroke-linejoin": "round",
+  "stroke-width": "2",
+  d: "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+})], -1
+/* HOISTED */
+);
+
+var _hoisted_31 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
+  xmlns: "http://www.w3.org/2000/svg",
+  "class": "h-6 w-6",
+  fill: "none",
+  viewBox: "0 0 24 24",
+  stroke: "currentColor"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
+  "stroke-linecap": "round",
+  "stroke-linejoin": "round",
+  "stroke-width": "2",
+  d: "M6 18L18 6M6 6l12 12"
+})], -1
+/* HOISTED */
+);
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_app_layout = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("app-layout");
 
@@ -23203,35 +23237,42 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       /* NEED_PATCH */
       ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.nota.descripcion]])]), _hoisted_21], 32
       /* HYDRATE_EVENTS */
-      )]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" End of Modal Content")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_23, [_hoisted_24, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+      )]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" End of Modal Content")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
         onclick: "document.getElementById('myModal').showModal()",
         onClick: _cache[7] || (_cache[7] = function ($event) {
           return $options.editarFormulario(_ctx.item);
         }),
         id: "btn",
-        "class": "p-3 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full"
-      }, [_hoisted_26])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("table", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("Border collapse doesn't work on this site yet but it's available in newer tailwind versions "), _hoisted_29, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.notas, function (item, index) {
+        "class": "mt-4 p-3 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full"
+      }, " AGREGAR NUEVA TAREA "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("table", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("Border collapse doesn't work on this site yet but it's available in newer tailwind versions "), _hoisted_25, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.notas, function (item, index) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("tr", {
           "class": "hover:bg-grey-lighter",
           key: index
-        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.nombre), 1
+        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.nombre), 1
         /* TEXT */
-        )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.descripcion), 1
+        )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_27, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.descripcion), 1
         /* TEXT */
-        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+          "class": [" text-white font-bold py-2 px-4 rounded-full", [item.principal ? 'bg-green-500 hover:bg-green-700' : 'bg-red-500 hover:bg-red-700']],
+          onClick: function onClick($event) {
+            return $options.marcarPrincipal(item, index);
+          }
+        }, [_hoisted_29], 10
+        /* CLASS, PROPS */
+        , ["onClick"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
           onclick: "document.getElementById('myModal').showModal()",
           "class": "bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-full",
           onClick: function onClick($event) {
             return $options.editarFormulario(item);
           }
-        }, " Editar ", 8
+        }, [_hoisted_30], 8
         /* PROPS */
         , ["onClick"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
           "class": "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full",
           onClick: function onClick($event) {
             return $options.eliminarNota(item, index);
           }
-        }, " Borrar ", 8
+        }, [_hoisted_31], 8
         /* PROPS */
         , ["onClick"])])]);
       }), 128

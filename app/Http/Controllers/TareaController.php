@@ -42,6 +42,7 @@ class TareaController extends Controller
         $nota = new Tarea();
         $nota->nombre = $request->nombre;
         $nota->descripcion = $request->descripcion;
+        $nota->principal = false;
         $nota->user_id = auth()->id();
         $nota->save();
 
@@ -96,5 +97,33 @@ class TareaController extends Controller
     {
         $nota = Tarea::find($id);
         $nota->delete();
+    }
+
+    public function principal($id)
+    {  
+
+        $nota = Tarea::find($id);
+
+        if(!$nota->principal){
+
+            $tareas = array();
+
+            $tareaAnterior = Tarea::where('principal', true)->first();
+            $tareaAnterior->principal = false;
+            $tareaAnterior->save();
+            $tareas[0] = $tareaAnterior;
+
+            $nota->principal= true;
+            $nota->save();
+            $tareas[1] = $nota;
+
+            return $tareas;
+        } 
+        else return $nota;
+        
+
+
+
+        
     }
 }

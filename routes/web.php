@@ -39,3 +39,4 @@ Route::middleware(['auth:sanctum', 'verified'])->put('/tareas/{id}',[TareaContro
 
 Route::middleware(['auth:sanctum', 'verified'])->delete('/tareas/{id}',[TareaController::class, 'destroy'])->name('tareas');
 
+Route::middleware(['auth:sanctum', 'verified'])->put('/tareas/principal/{id}',[TareaController::class, 'principal'])->name('principal');

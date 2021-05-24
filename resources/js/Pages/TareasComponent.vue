@@ -1,10 +1,8 @@
 <template>
   <app-layout>
-            <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Tareas
-            </h2>
-        </template>
+    <template #header>
+      <h2 class="font-semibold text-xl text-gray-800 leading-tight">Tareas</h2>
+    </template>
     <dialog
       id="myModal"
       class="h-auto w-11/12 md:w-1/2 p-5 bg-white rounded-md"
@@ -133,32 +131,14 @@
 
     <div>
       <div class="sm:w-3/3 md:w-2/3 mx-auto">
-        <div class="my-5 grid grid-cols-3 gap-4">
-          <div class="text-xl font-bold p-3 col-span-2">LISTA</div>
-          <div class="pl-20">
-            <button
-              onclick="document.getElementById('myModal').showModal()"
-              @click="editarFormulario(item)"
-              id="btn"
-              class="p-3 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
+        <button
+          onclick="document.getElementById('myModal').showModal()"
+          @click="editarFormulario(item)"
+          id="btn"
+          class="mt-4 p-3 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full"
+        >
+          AGREGAR NUEVA TAREA
+        </button>
 
         <div class="bg-white shadow-md rounded my-6">
           <table class="text-left w-full border-collapse">
@@ -196,17 +176,63 @@
                 </td>
                 <td class="py-4 px-6 border-b border-grey-light">
                   <button
+                    class=" text-white font-bold py-2 px-4 rounded-full"
+                    :class="[ item.principal ? 'bg-green-500 hover:bg-green-700' : 'bg-red-500 hover:bg-red-700']"
+                    @click="marcarPrincipal(item, index)"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </button>
+                  <button
                     onclick="document.getElementById('myModal').showModal()"
                     class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-full"
                     @click="editarFormulario(item)"
                   >
-                    Editar
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
+                    </svg>
                   </button>
                   <button
                     class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
                     @click="eliminarNota(item, index)"
                   >
-                    Borrar
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
                   </button>
                 </td>
               </tr>
@@ -232,6 +258,7 @@ export default {
       notas: [],
       modoEditar: false,
       nota: { nombre: "", descripcion: "" },
+      principalId: "",
     };
   },
   created() {
@@ -270,6 +297,14 @@ export default {
       this.nota.descripcion = item.descripcion;
       this.nota.id = item.id;
       this.modoEditar = true;
+    },
+    marcarPrincipal(nota, index) {
+      axios.put(`/tareas/principal/${nota.id}`).then((res) => {
+        const indexAnt = this.notas.findIndex((item) => item.id === res.data[0].id);
+        const indexAct = this.notas.findIndex((item) => item.id === res.data[1].id);
+        this.notas[indexAnt] = res.data[0];
+        this.notas[indexAct] = res.data[1];
+      });
     },
     editarNota(nota) {
       const params = { nombre: nota.nombre, descripcion: nota.descripcion };
